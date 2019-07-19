@@ -1,18 +1,13 @@
 #include "GenericLog.h"
 
-GenericLog::GenericLog(LogHandler& handler) {
-	setLogHandler(handler);
-}
-void GenericLog::setLogHandler(LogHandler& handler) {
-	(*this).logHandler = &handler;
-}
+GenericLog::GenericLog(LogHandler& handler) : logHandler(handler) { }
 
 void GenericLog::level(int logLevel, String message) {
 	String prefix = String("[");
 	prefix += millis();
 	prefix += "] ";
 
-	(*logHandler).write_message(logLevel, prefix + message);
+	logHandler.write_message(logLevel, prefix + message);
 }
 
 void GenericLog::info(String message) {

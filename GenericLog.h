@@ -7,10 +7,9 @@
 
 class GenericLog {
 protected:
-	LogHandler* logHandler;
+	LogHandler& logHandler;
 public:
 	GenericLog(LogHandler& handler);
-	void setLogHandler(LogHandler& handler);
 
 	virtual void level(int logLevel, String message);
 

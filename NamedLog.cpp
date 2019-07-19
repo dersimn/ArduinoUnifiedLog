@@ -9,5 +9,5 @@ void NamedLog::level(int logLevel, String message) {
 	prefix += logName;
 	prefix += "] ";
 
-	(*logHandler).write_message(logLevel, prefix + message);
+	logHandler.write_message(logLevel, prefix + message);
 }
