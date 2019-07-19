@@ -13,7 +13,7 @@ PubSubClient client(espClient);
 
 LogHandler logHandler;
 LogSerialModule serialModule(115200);
-LogMqttModule mqttModule(&client, "esplogtest/esp0");
+LogMqttModule mqttModule(client, "esplogtest/esp0");
 
 GenericLog Log    (logHandler);
 NamedLog   LogWiFi(logHandler, "WiFi");
