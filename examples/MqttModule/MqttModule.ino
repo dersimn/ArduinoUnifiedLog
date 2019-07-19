@@ -1,5 +1,7 @@
 #include <ESP8266WiFi.h>
-#include <PubSubClient.h>
+
+#include <PubSubClient.h>         // https://github.com/knolleary/pubsubclient
+#include <PubSubClientTools.h>    // https://github.com/dersimn/ArduinoPubSubClientTools
 
 #include <GenericLog.h>
 #include <NamedLog.h>
@@ -8,20 +10,21 @@
 #include <LogSerialModule.h>
 #include <LogMqttModule.h>
 
+#define WIFI_SSID         "..."
+#define WIFI_PASS         "..."
+#define MQTT_SERVER       "10.1.1.100"
+
 WiFiClient espClient;
-PubSubClient client(espClient);
+PubSubClient client(MQTT_SERVER, 1883, espClient);
+PubSubClientTools mqtt(client);
 
 LogHandler logHandler;
 LogSerialModule serialModule(115200);
-LogMqttModule mqttModule(client, "esplogtest/esp0");
+LogMqttModule mqttModule(mqtt, "esplogtest/esp0");
 
 GenericLog Log    (logHandler);
 NamedLog   LogWiFi(logHandler, "WiFi");
 NamedLog   LogMqtt(logHandler, "Mqtt");
-
-#define ssid          "..."
-#define password      "..."
-#define mqtt_server   "10.0.0.111"
 
 long lastMsg = 0;
 int value = 0;
@@ -31,11 +34,9 @@ void setup() {
   logHandler.addModule(&mqttModule);
   
   Log.info("Running Setup..");
-
-  client.setServer(mqtt_server, 1883);
   
-  LogWiFi.info(String("Connecting to ")+ssid);
-  WiFi.begin(ssid, password);
+  LogWiFi.info(String("Connecting to ")+WIFI_SSID);
+  WiFi.begin(WIFI_SSID, WIFI_PASS);
 }
 
 void loop() {
