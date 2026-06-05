@@ -6,10 +6,11 @@ LogMqttModule::LogMqttModule(PubSubClientTools& _mqtt, String _topic) : mqtt(_mq
 
 void LogMqttModule::write_message(String message) {
 	if (mqtt.connected()) {
-		mqtt.publish(topic, messageStash+message);
+		mqtt.publish(topic, String(messageStash+message));
         messageStash = "";
 	} else {
         messageStash += message;
         messageStash += "\n";
+        Serial.println(String()+"stashing message"+messageStash);
     }
 }
