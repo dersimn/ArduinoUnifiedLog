@@ -8,6 +8,6 @@ bool LogMqttModule::isConnected() {
 	return mqtt.connected();
 }
 
-bool LogMqttModule::send(String message) {
+bool LogMqttModule::send(const String& message) {
 	return mqtt.publish(topic, message);
 }

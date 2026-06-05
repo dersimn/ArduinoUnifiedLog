@@ -11,15 +11,15 @@ protected:
 public:
 	GenericLog(LogHandler& handler);
 
-	virtual void level(int logLevel, String message);
+	virtual void level(int logLevel, const String& message);
 
-    void debug(String message);
-	void info(String message);
-	void warn(String message);
-	void error(String message);
+    void debug(const String& message);
+	void info(const String& message);
+	void warn(const String& message);
+	void error(const String& message);
 
-	void operator()(int logLevel, String message);
-	void operator()(String message);
+	void operator()(int logLevel, const String& message);
+	void operator()(const String& message);
 };
 
 #endif

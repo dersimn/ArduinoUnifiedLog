@@ -9,7 +9,7 @@ class LogSerialModule : public LogModule {
 public:
 	LogSerialModule(int baud);
 
-	virtual void write_message(String message);
+	virtual void write_message(const String& message) override;
 };
 
 #endif

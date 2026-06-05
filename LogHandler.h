@@ -12,7 +12,7 @@ private:
 	LogModule* modules[MAX_MODULES];
 public:
 	bool addModule(LogModule* module);
-	void write_message(int logLevel, String message);
+	void write_message(int logLevel, const String& message);
 };
 
 #endif

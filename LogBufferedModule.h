@@ -23,15 +23,15 @@ public:
 	void   setMaxCacheSize(size_t bytes) { maxCacheSize = bytes; }
 	size_t getMaxCacheSize() { return maxCacheSize; }
 
-	virtual void write_message(String message);
+	virtual void write_message(const String& message) override;
 protected:
 	// Return true when the transport is ready to send.
 	virtual bool isConnected() = 0;
 	// Send a single message. Return true on success; on false the message is
 	// (re)cached for a later attempt.
-	virtual bool send(String message) = 0;
+	virtual bool send(const String& message) = 0;
 
-	void bufferMessage(String message);
+	void bufferMessage(const String& message);
 	void flushCache();
 
 	String cache;

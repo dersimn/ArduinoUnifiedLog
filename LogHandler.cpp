@@ -9,7 +9,7 @@ bool LogHandler::addModule(LogModule* module) {
 	}
 }
 
-void LogHandler::write_message(int logLevel, String message) {
+void LogHandler::write_message(int logLevel, const String& message) {
 	for (int i = 0 ; i < count ; i++) {
 		if ( logLevel >= (*modules[i]).getMinimumLogLevel() ) {
 			(*modules[i]).write_message(message);

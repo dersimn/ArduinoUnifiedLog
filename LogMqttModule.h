@@ -12,8 +12,8 @@ public:
 	LogMqttModule(PubSubClientTools& mqtt, String topic);
 
 protected:
-	virtual bool isConnected();
-	virtual bool send(String message);
+	virtual bool isConnected() override;
+	virtual bool send(const String& message) override;
 
 	PubSubClientTools& mqtt;
 	String topic;

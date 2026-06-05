@@ -11,7 +11,7 @@ public:
 	int  getMinimumLogLevel() { return outputMinimumLogLevel; }
 	void setMinimumLogLevel(int min) { outputMinimumLogLevel = min; }
 
-	virtual void write_message(String message); 
+	virtual void write_message(const String& message);
 };
 
 #endif

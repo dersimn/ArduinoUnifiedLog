@@ -35,8 +35,8 @@ public:
 	void setSeverity(int severity) { this->severity = severity; }
 
 protected:
-	virtual bool isConnected();
-	virtual bool send(String message);
+	virtual bool isConnected() override;
+	virtual bool send(const String& message) override;
 
 	UDP& udp;
 	String server;

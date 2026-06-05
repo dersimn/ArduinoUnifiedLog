@@ -12,7 +12,7 @@ private:
 public:
 	NamedLog(LogHandler& handler, String name);
 
-	void level(int logLevel, String message);
+	void level(int logLevel, const String& message) override;
 };
 
 #endif

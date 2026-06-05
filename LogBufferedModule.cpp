@@ -1,6 +1,6 @@
 #include "LogBufferedModule.h"
 
-void LogBufferedModule::write_message(String message) {
+void LogBufferedModule::write_message(const String& message) {
 	if (isConnected()) {
 		flushCache();
 		if (!send(message)) {
@@ -11,7 +11,7 @@ void LogBufferedModule::write_message(String message) {
 	}
 }
 
-void LogBufferedModule::bufferMessage(String message) {
+void LogBufferedModule::bufferMessage(const String& message) {
 	cache += message;
 	cache += "\n";
 

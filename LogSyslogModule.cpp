@@ -10,7 +10,7 @@ bool LogSyslogModule::isConnected() {
 	return true;
 }
 
-bool LogSyslogModule::send(String message) {
+bool LogSyslogModule::send(const String& message) {
 	// RFC 5424 header:
 	// <PRI>VERSION TIMESTAMP HOSTNAME APP-NAME PROCID MSGID MSG
 	// NILVALUE "-" is used for fields we cannot provide (no RTC for timestamp).
