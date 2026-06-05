@@ -4,13 +4,10 @@ LogMqttModule::LogMqttModule(PubSubClientTools& _mqtt, String _topic) : mqtt(_mq
     setMinimumLogLevel(10);
 }
 
-void LogMqttModule::write_message(String message) {
-	if (mqtt.connected()) {
-		mqtt.publish(topic, String(messageStash+message));
-        messageStash = "";
-	} else {
-        messageStash += message;
-        messageStash += "\n";
-        Serial.println(String()+"stashing message"+messageStash);
-    }
+bool LogMqttModule::isConnected() {
+	return mqtt.connected();
+}
+
+bool LogMqttModule::send(String message) {
+	return mqtt.publish(topic, message);
 }

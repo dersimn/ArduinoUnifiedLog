@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <Udp.h>
 
-#include "LogModule.h"
+#include "LogBufferedModule.h"
 
 // Syslog severities (RFC 5424, section 6.2.1)
 #define SYSLOG_SEV_EMERGENCY 0
@@ -27,15 +27,17 @@
 #define SYSLOG_FAC_LOCAL6 22
 #define SYSLOG_FAC_LOCAL7 23
 
-class LogSyslogModule : public LogModule {
+class LogSyslogModule : public LogBufferedModule {
 public:
 	LogSyslogModule(UDP& udp, String server, String hostname, String appName, uint16_t port = 514);
 
 	void setFacility(int facility) { this->facility = facility; }
 	void setSeverity(int severity) { this->severity = severity; }
 
-	virtual void write_message(String message);
 protected:
+	virtual bool isConnected();
+	virtual bool send(String message);
+
 	UDP& udp;
 	String server;
 	String hostname;

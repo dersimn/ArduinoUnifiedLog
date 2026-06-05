@@ -4,7 +4,13 @@ LogSyslogModule::LogSyslogModule(UDP& _udp, String _server, String _hostname, St
 	setMinimumLogLevel(10);
 }
 
-void LogSyslogModule::write_message(String message) {
+bool LogSyslogModule::isConnected() {
+	// UDP is connectionless; send() reports whether the datagram could be
+	// dispatched, so always attempt and let it decide.
+	return true;
+}
+
+bool LogSyslogModule::send(String message) {
 	// RFC 5424 header:
 	// <PRI>VERSION TIMESTAMP HOSTNAME APP-NAME PROCID MSGID MSG
 	// NILVALUE "-" is used for fields we cannot provide (no RTC for timestamp).
@@ -17,8 +23,9 @@ void LogSyslogModule::write_message(String message) {
 	packet += " - - ";
 	packet += message;
 
-	if (udp.beginPacket(server.c_str(), port)) {
-		udp.write((const uint8_t*)packet.c_str(), packet.length());
-		udp.endPacket();
+	if (!udp.beginPacket(server.c_str(), port)) {
+		return false;
 	}
+	udp.write((const uint8_t*)packet.c_str(), packet.length());
+	return udp.endPacket() == 1;
 }
