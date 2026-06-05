@@ -3,19 +3,20 @@
 
 #include <Arduino.h>
 
-#include "LogModule.h"
+#include "LogBufferedModule.h"
 #include <PubSubClient.h>
 #include <PubSubClientTools.h>
 
-class LogMqttModule : public LogModule {
+class LogMqttModule : public LogBufferedModule {
 public:
 	LogMqttModule(PubSubClientTools& mqtt, String topic);
 
-	virtual void write_message(String message);
 protected:
+	virtual bool isConnected() override;
+	virtual bool send(const String& message) override;
+
 	PubSubClientTools& mqtt;
-    String topic;
-    String messageStash;
+	String topic;
 };
 
 #endif

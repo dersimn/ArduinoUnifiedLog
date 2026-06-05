@@ -4,6 +4,6 @@ LogSerialModule::LogSerialModule(int baud) {
 	Serial.begin(baud);
 }
 
-void LogSerialModule::write_message(String message) {
+void LogSerialModule::write_message(const String& message) {
 	Serial.println(message);
 }

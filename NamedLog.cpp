@@ -2,12 +2,15 @@
 
 NamedLog::NamedLog(LogHandler& handler, String name): GenericLog(handler),logName(name) { }
 
-void NamedLog::level(int logLevel, String message) {
-	String prefix = String("[");
-	prefix += millis();
-	prefix += "][";
-	prefix += logName;
-	prefix += "] ";
+void NamedLog::level(int logLevel, const String& message) {
+	String out;
+	out.reserve(message.length() + logName.length() + 16);
+	out += "[";
+	out += millis();
+	out += "][";
+	out += logName;
+	out += "] ";
+	out += message;
 
-	logHandler.write_message(logLevel, prefix + message);
+	logHandler.write_message(logLevel, out);
 }

@@ -1,18 +1,17 @@
 #include <ESP8266WiFi.h>
-
-#include <PubSubClient.h>         // https://github.com/knolleary/pubsubclient
-#include <PubSubClientTools.h>    // https://github.com/dersimn/ArduinoPubSubClientTools
+#include <WiFiUdp.h>
 
 #include <GenericLog.h>
 #include <NamedLog.h>
 #include <LogHandler.h>
 #include <LogModule.h>
 #include <LogSerialModule.h>
-#include <LogMqttModule.h>
+#include <LogSyslogModule.h>
 
 #define WIFI_SSID         "..."
 #define WIFI_PASS         "..."
-#define MQTT_SERVER       "10.1.1.100"
+#define SYSLOG_SERVER     "10.1.1.100"
+#define SYSLOG_PORT       514
 
 #define APP_NAME "MyProject"
 String chipId();                 // defined below; used during static init
@@ -21,25 +20,25 @@ const String s = "";
 const String ESP_ID = chipId();
 const String BOARD_ID = s+APP_NAME+"_"+ESP_ID;
 
-WiFiClient espClient;
-PubSubClient client(MQTT_SERVER, 1883, espClient);
-PubSubClientTools mqtt(client);
+WiFiUDP udp;
 
 LogHandler logHandler;
 LogSerialModule serialModule(115200);
-LogMqttModule mqttModule(mqtt, s+"esplogtest/"+BOARD_ID);
+LogSyslogModule syslogModule(udp, SYSLOG_SERVER, BOARD_ID, APP_NAME, SYSLOG_PORT);
 
 GenericLog Log    (logHandler);
 NamedLog   LogWiFi(logHandler, "WiFi");
-NamedLog   LogMqtt(logHandler, "MQTT");
 
 long lastMsg = 0;
-int value = 0;
 
 void setup() {
   logHandler.addModule(&serialModule);
-  logHandler.addModule(&mqttModule);
-  
+  logHandler.addModule(&syslogModule);
+
+  // Optionally tune how messages appear on the syslog server:
+  // syslogModule.setFacility(SYSLOG_FAC_LOCAL0);
+  // syslogModule.setSeverity(SYSLOG_SEV_INFO);
+
   Log.info("Running Setup..");
 
   LogWiFi.info(s+"Connecting to "+WIFI_SSID);
@@ -50,29 +49,14 @@ void setup() {
 }
 
 void loop() {
-  client.loop();
-  
   long now = millis();
   if (now - lastMsg > 2000) {
     if (WiFi.status() == WL_CONNECTED) {
       LogWiFi.info(s+"Connected to SSID: "+WiFi.SSID());
     }
-    if (!client.connected()) {
-      reconnect();
-    }
-    
-    lastMsg = now;
-    ++value;
-    Log.info("testloop");
-  }
-}
 
-void reconnect() {
-  LogMqtt.info("Attempting MQTT connection...");
-  if (client.connect("ESP8266Client")) {
-    LogMqtt.info("connected");
-  } else {
-    LogMqtt.error(s+"failed, rc=")+client.state()+" try again in 5 seconds");
+    lastMsg = now;
+    Log.info("testloop");
   }
 }
 
